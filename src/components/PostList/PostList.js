@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import config from '../../config/config';
 import load from '../../helpers/spreadsheet';
 
+import ReactTable from 'react-table';
+import "react-table/react-table.css";
+
 class PostList extends Component {
 
     constructor() {
@@ -19,7 +22,7 @@ class PostList extends Component {
 
     onLoad = (data, error) => {
         if (data) {
-            console.log('onLoad0',data);
+            console.log('onLoad0', data);
             const parties = data.parties;
             console.log(parties);
             this.setState({ parties });
@@ -41,21 +44,43 @@ class PostList extends Component {
 
     render() {
         const { parties, error } = this.state;
-        console.log('parties ',parties);
+
+        const columns = [{
+            Header: 'Name',
+            accessor: 'name'
+        }, {
+            Header: 'Abbreviation',
+            accessor: 'abbreviation'
+        }, {
+            Header: 'Foundation Year',
+            accessor: 'foundationYear'
+        }, {
+            Header: 'Current Leader',
+            accessor: 'currentLeader'
+        }, {
+            Header: 'States/UT',
+            accessor: 'statesUT'
+        }, {
+            Header: 'Symbol',
+            accessor: 'symbol'
+        }]
+
+        console.log('parties ', parties);
         if (error) {
             return <div>
                 {this.state.error}
             </div>
         }
         return (
-            // <div>hey</div>
-            <ul>
-                {parties.map((party, i)=>(
-                    <li key={i}>
-                    {party.foundationYear} {party.name}
-                    </li>
-                ))}
-            </ul>
+            <div>
+                <h1>List of political parties in India</h1>
+                <ReactTable
+                    data={this.state.parties}
+                    columns={columns}
+                />
+
+
+            </div>
         )
     }
 }
